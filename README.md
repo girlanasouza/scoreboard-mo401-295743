@@ -1,4 +1,4 @@
-# Simulador de execução fora de ordem com scoreboard - MO401 - 1s2023
+# Simulador de execução fora de ordem com scoreboard - MO401 - 1s2024
 
 ## Objetivo Geral
 
@@ -91,12 +91,7 @@ o resultado esperado é:
 
 Teste o seu simulador com diferentes entradas e configurações de unidades funcionais. Inclua seus testes na entrega. Para entrega, inclua seu código, instruções mínimas para build (se necessário) e execução, juntamente com suas entradas de teste e respectivas saídas. Inclua todos os arquivos em um único .zip e envie pelo Classroom. 
 
-Na prova haverão duas opções para aproveitamento do trabalho. Quem entregar uma solução completa para o trabalho poderá escolher uma das duas opções: 
-
-1. Cópia da nota do trabalho para uma seção de questões prova sobre scoreboarding.  
-2. Bônus de até 2 pontos na nota total da prova, de acordo com a nota do trabalho.
-
-A opção 1 só estará disponível para aqueles que entregarem o trabalho até 18/04 às 16h. A opção 2 estará disponível para aqueles que entregarem até 25/04 às 16h. Para ambas opções, só serão consideradas submissões com soluções  que implementem as regras completas de scoreboarding (ainda que contendo eventuais erros).
+O trabalho entregue até a data limite de 16/04 às 23h59m dará bônus de até 2 pontos na nota total da prova 1, de acordo com a nota do trabalho. Só serão consideradas submissões com soluções  que implementem as regras completas de scoreboarding (ainda que contendo eventuais pequenos erros).
 
 ## Parser
 
