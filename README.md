@@ -91,7 +91,7 @@ o resultado esperado é:
 
 Teste o seu simulador com diferentes entradas e configurações de unidades funcionais. Inclua seus testes na entrega. Para entrega, inclua seu código, instruções mínimas para build (se necessário) e execução, juntamente com suas entradas de teste e respectivas saídas. Inclua todos os arquivos em um único .zip e envie pelo Classroom. 
 
-O trabalho entregue até a data limite de 08/07 às 23h59m dará bônus de até 2 pontos na nota total da prova 1, de acordo com a nota do trabalho. Só serão consideradas submissões com soluções  que implementem as regras completas de scoreboarding (ainda que contendo eventuais pequenos erros).
+O trabalho entregue até a data limite dará bônus de até 2 pontos na nota total da prova 1, de acordo com a nota do trabalho. Só serão consideradas submissões com soluções  que implementem as regras completas de scoreboarding (ainda que contendo eventuais pequenos erros).
 
 ## Parser
 
