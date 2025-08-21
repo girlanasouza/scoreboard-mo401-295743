@@ -1,6 +1,6 @@
 """
 Zero Effort Parser (rv-zep)
-This was made in about 15 minutes with the help of Chat-GPT3. 
+This was made in about 15 minutes with the help of Chat-GPT. 
 I don't trust it. You shoudn't trust it either. 
 
 lfwanner
