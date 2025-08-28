@@ -1,32 +1,21 @@
 import pandas as pd
 
-instructions_status = [
-    {
-        "Instruction": "fld f1, 0(x1)",
-        "Issue": None,
-        "Read": None,
-        "Execute": None,
-        "Write": None
-    }
-]
+import parser_inst
+import parser_config
 
-register_status = {
-    "x0" : None, "x1" : None, "x2" : None, "x3" : None, "x4" : None, "x5" : None, 
-    "x6" : None, "x7" : None, "x8" : None, "x9" : None, "x10": None, "x11": None, 
-    "x6" : None, "x7" : None, "x8" : None, "x9" : None, "x10": None, "x11": None,
-    "x12": None, "x13": None, "x14": None, "x15": None, "x16": None, "x17": None,
-    "x18": None, "x19": None, "x20": None, "x21": None, "x22": None, "x23": None,
-    "x24": None, "x25": None, "x26": None, "x27": None, "x28": None, "x29": None,
-    "x30": None, "x31": None,
+# instructions_status = [
+#     {
+#         "Instruction": "fld f1, 0(x1)",
+#         "Issue": None,
+#         "Read": None,
+#         "Execute": None,
+#         "Write": None
+#     }
+# ]
 
+#  Register Status Table
+#  Mapeia cada registrador para a unidade funcional que irá escrever nele
 
-    "f0": None, "f1": None, "f2": None, "f3": None, "f4": None, "f5": None,
-    "f6": None, "f7": None, "f8": None, "f9": None, "f10": None, "f11": None,
-    "f12": None, "f13": None, "f14": None, "f15": None, "f16": None, "f17": None,
-    "f18": None, "f19": None, "f20": None, "f21": None, "f22": None, "f23": None,
-    "f24": None, "f25": None, "f26": None, "f27": None, "f28": None, "f29": None,
-    "f30": None, "f31": None, "f0": None, "f31": None
-}
 
 '''
     busy: unidade funcional ocupada
@@ -37,26 +26,38 @@ register_status = {
     rj, rk: bits que indicam se os valores dos registradores de origem estão
 '''
 
+def init_register_status():
+    register_status = {}
 
-def parse_config(arquivo):
-    # Status das unidades funcionais
-    uf_status = {}
-    with open(arquivo, 'r') as f:
-        linhas = f.readlines()
-        for linha in linhas:
-            partes = linha.strip().split()
-            uf_status[partes[0]] = {partes[1]: partes[2]}
-    return uf_status
+    # Registradores inteiros (x0..x31)
+    for i in range(32):
+        register_status[f"x{i}"] = {"x": i, "x_type": "int", "writer": None}
 
-def init_fus(uf_status):
-    fus = {}
-    for uf, config in uf_status.items():
+    # Registradores de ponto flutuante (f0..f31)
+    for i in range(32):
+        register_status[f"f{i}"] = {"f": i, "f_type": "float", "writer": None}
+
+    return register_status
+
+# Instruction status
+def init_inst_status(program_name):
+    insts = parser_inst.parse_instructions(program_name)
+    inst_status = []
+    for inst in insts:
+        inst_status.append({"instr": inst, "issue": None, "read": None, "exec": None, "write": None})
+    return inst_status
+
+# Functional unit status
+def init_fus(program_name):
+    fus_configs = parser_config.parse_config(program_name)
+    fus_status = {}
+    for uf, config in fus_configs.items():
         for c in config:
             qnt = int(c)
             ciclos = int(config[c])
-            fus[uf] = []
+            fus_status[uf] = []
             for i in range(qnt):
-                fus[uf].append({
+                fus_status[uf].append({
                     'id': f'{uf}{i+1}',
                     'busy': False,
                     'op': None,
@@ -70,14 +71,16 @@ def init_fus(uf_status):
                     'cycles_left': 0,
                     'cycles': ciclos
                 })
-    return fus
+    return fus_status
 
 
-def can_issue(instruction, fus, register_status):
+def can_issue(instruction, fus_status, register_status):
     '''
         verifica se há unidade funcional livre para a instrução
         verifica se o registrador de destino não está aguardando outra unidade
     '''
+
+
     return True
 
 def issue(instruction, fus, register_status):
@@ -126,8 +129,9 @@ def step_cycle(cycle, program, instruction_status, fus, register_status):
         atualiza estruturas de dados
     '''
 
-def scoreboard():
-    # Exemplo de uso das funções
+def scoreboard(program_name):
+    instructions_status = init_inst_status(program_name) # inicializa instruction status table
+
     return instructions_status
 
 
@@ -145,4 +149,6 @@ def print_result(instruction_status, program):
 
 if __name__ == "__main__":
     # mostrar_tabela()ambiente
-    scoreboard()
+    nome_programa = "tests/ex.s"
+    inst_status = scoreboard(nome_programa)
+    print(inst_status)

@@ -14,7 +14,7 @@ REG_PREFIXES = {
     'f': 'float'
 }
 
-def parse_file(filename):
+def parse_instructions(filename):
     instructions = []
     with open(filename, 'r') as f:
         for line in f:
@@ -62,7 +62,7 @@ def parse_file(filename):
             })
     return instructions
 
-# Example usage
-instructions = parse_file('example.s')
-for i in instructions: 
-    print(i)
+# # Example usage
+# instructions = parse_file('tests/ex.s')
+# for i in instructions: 
+#     print(i)
