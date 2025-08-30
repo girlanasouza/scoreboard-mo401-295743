@@ -4,5 +4,5 @@ def parse_config(arquivo):
         linhas = f.readlines()
         for linha in linhas:
             partes = linha.strip().split()
-            fus_configs[partes[0]] = {partes[1]: partes[2]}
+            fus_configs[partes[0]] = {'qtd': partes[1], 'cycles': partes[2]}
     return fus_configs

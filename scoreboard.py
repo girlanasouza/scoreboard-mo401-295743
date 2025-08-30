@@ -3,18 +3,6 @@ import pandas as pd
 import parser_inst
 import parser_config
 
-# instructions_status = [
-#     {
-#         "Instruction": "fld f1, 0(x1)",
-#         "Issue": None,
-#         "Read": None,
-#         "Execute": None,
-#         "Write": None
-#     }
-# ]
-
-#  Register Status Table
-#  Mapeia cada registrador para a unidade funcional que irá escrever nele
 
 
 '''
@@ -51,44 +39,87 @@ def init_inst_status(program_name):
 def init_fus(program_name):
     fus_configs = parser_config.parse_config(program_name)
     fus_status = {}
-    for uf, config in fus_configs.items():
-        for c in config:
-            qnt = int(c)
-            ciclos = int(config[c])
-            fus_status[uf] = []
-            for i in range(qnt):
-                fus_status[uf].append({
-                    'id': f'{uf}{i+1}',
-                    'busy': False,
-                    'op': None,
-                    'fi': None,
-                    'fj': None,
-                    'fk': None,
-                    'qj': None,
-                    'qk': None,
-                    'rj': False,
-                    'rk': False,
-                    'cycles_left': 0,
-                    'cycles': ciclos
-                })
+    for uf_type, config in fus_configs.items():
+        if uf_type == 'int':
+            op = 0
+        elif uf_type == 'mult':
+            op = 1
+        elif uf_type == 'add':
+            op = 2
+        elif uf_type == 'div':
+            op = 3
+        for c in range(int(config['qtd'])):
+            fus_status[f'{uf_type}{c+1}'] = {
+                'Opcode': op, 
+                'Busy': False, 
+                'Op': None, 
+                'Fi': None,
+                'Fj': None, 
+                'Fk': None, 
+                'Qj': None, 
+                'Qk': None,
+                'Rj': False, 
+                'Rk': False, 
+                'Cycles_left': int(config['cycles']), 
+                'Cycles': int(config['cycles'])
+            }
     return fus_status
 
 
-def can_issue(instruction, fus_status, register_status):
-    '''
-        verifica se há unidade funcional livre para a instrução
-        verifica se o registrador de destino não está aguardando outra unidade
-    '''
+def aux_issue(instruction):
+    opcode = instruction['opcode']
+    rs1 = instruction['rs1']
+    rs1_type = instruction['rs1_type']
+    rs2 = instruction['rs2']
+    rs2_type = instruction['rs2_type']
+    rd = instruction['rd']
+    rd_type = instruction['rd_type']
 
+    prefix_rd = "x" if rd_type == "int" else "f"
+    key_rd = f"{prefix_rd}{rd}"
 
-    return True
+    prefix_rs1 = "x" if rs1_type == "int" else "f"
+    key_rs1 = f"{prefix_rs1}{rs1}"
 
-def issue(instruction, fus, register_status):
+    prefix_rs2 = "x" if rs2_type == "int" else "f"
+    key_rs2 = f"{prefix_rs2}{rs2}"
+
+    return opcode, key_rd, key_rs1, key_rs2
+
+def issue(idx, opcode, key_rd, key_rs1, key_rs2, fus, register_status, inst_status, stages):
     '''
         aloca unidade funcional
         marca registrador destino como ocupado
         atualiza instruction_status[instr]["issue"] = cycle
     '''
+
+    opcodes = {0, 1, 2, 3, 4, 5} 
+
+    for fu_name, fu in fus.items():
+        if fu['Opcode'] != opcode or fu['Busy']:
+            continue
+        if  register_status[key_rd]['writer'] is not None:
+            continue
+        fu['Busy'] = True
+        fu['Op'] = opcode
+        fu['Fi'] = key_rd if opcode in opcodes else None
+        fu['Fj'] = key_rs1
+        fu['Fk'] = key_rs2
+        fu['Qj'] = register_status[key_rs1]['writer']
+        fu['Qk'] = register_status[key_rs2]['writer']
+        fu['Rj'] = fu['Qj'] is None
+        fu['Rk'] = fu['Qk'] is None
+        fu['CyclesLeft'] = fu['Cycles']
+        
+        if opcode in opcodes:
+            register_status[key_rd]['writer'] = fu_name
+
+        inst_status[idx]['issue'] = 1
+        stages['Instruction/Cicle'][idx] = inst_status[idx]['instr']
+        stages['Issue'][idx] = inst_status[idx]['issue']
+
+        return True
+    return False  
 
 def can_read(instruction, fus, register_status):
     '''
@@ -129,21 +160,66 @@ def step_cycle(cycle, program, instruction_status, fus, register_status):
         atualiza estruturas de dados
     '''
 
+def init_stages(num_instructions):
+    stages = {
+    "Header": ["Instruction/Cycle", "Issue", "Read", "Execute", "Write"],
+        "Instruction/Cicle": [None]*len(inst_status),
+        "Issue": [None]*len(inst_status),
+        "Read": [None]*len(inst_status),
+        "Execute": [None]*len(inst_status),
+        "Write": [None]*len(inst_status)
+    }
+
+def any_fu_busy(fus):
+    for fu_name, fu in fus.items():
+        if fu['Busy']:
+            return True
+    return False
+
 def scoreboard(program_name):
     instructions_status = init_inst_status(program_name) # inicializa instruction status table
+    register_status = init_register_status() # inicializa register status table
+    fus = init_fus(program_name) # inicializa functional unit status table
+    stages = init_stages(len(instructions_status)) # inicializa estágios
+
+    # inst_status[idx]['instr']
+    for idx, i in enumerate(inst_status):
+        inst = i['instr']
+        opcode, key_rd, key_rs1, key_rs2 = aux_issue(inst)
+        print(inst)
+
+    
+    ## ISSUE
+    idx = 0
+    issued = issue(
+        idx, opcode, key_rd, key_rs1, key_rs2,
+        fus, register_status, inst_status, stages
+    )
+    if issued:
+        idx += 1
 
     return instructions_status
 
+def montar_instrucao(stages):
+    for idx, i in enumerate(stages['Instruction/Cicle']):
+        if i is not None:
+            if i['opcode'] == 0:
+                rd = f"f{i['rd']}" if i['rd_type'] == 'float' else f"x{i['rd']}"
+                rs1 = f"f{i['rs1']}" if i['rs1_type'] == 'float' else f"x{i['rs1']}"
+                imm = i.get('imm', 0)
+                i_mont = f"fld {rd}, {imm}({rs1})"
+                stages['Instruction/Cicle'][idx] = i_mont 
 
-def print_result(instruction_status, program):
-    print(f"{'Instruction/Cycle':<25}{'Issue':<8}{'Read':<8}{'Execute':<10}{'Write':<8}")
-    for instr, status in zip(program, instruction_status):
-        issue   = status.get("issue",  "-")
-        read    = status.get("read",   "-")
-        execute = status.get("exec",   "-")
-        write   = status.get("write",  "-")
-        
-        print(f"{instr:<25}{issue!s:<8}{read!s:<8}{execute!s:<10}{write!s:<8}")
+
+def print_result(stages):
+    df_stages = pd.DataFrame({
+        "Instruction/Cycle": stages["Instruction/Cicle"],
+        "Issue": stages["Issue"],
+        "Read": stages["Read"],
+        "Execute": stages["Execute"],
+        "Write": stages["Write"]
+    })
+    print(df_stages.to_string(index=False))
 
 
 
