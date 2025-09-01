@@ -1,9 +1,6 @@
 import pandas as pd
-
 import parser_inst
 import parser_config
-
-
 
 '''
     busy: unidade funcional ocupada
@@ -138,12 +135,6 @@ def execute(unit, cycle, instruction_status):
         decrementa cycles_left
         se cycles_left == 0, atualiza instruction_status[instr]["execute"] = cycle
     '''
-
-def can_write(unit, fus, register_status):
-    '''
-        retorna true se nenhuma outra unidade funcional estiver dependendo do registrador de destino
-    '''
-    return True
 
 def write(unit, cycle, instruction_status, register_status):
     '''
