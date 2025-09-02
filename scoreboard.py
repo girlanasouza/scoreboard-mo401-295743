@@ -179,7 +179,7 @@ def scoreboard(program_name):
         opcode, key_rd, key_rs1, key_rs2 = aux_issue(inst)
         print(inst)
 
-    
+    # while instructions or for fu in fus[Busy]
     ## ISSUE
     idx = 0
     issued = issue(
