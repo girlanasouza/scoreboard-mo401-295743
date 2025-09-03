@@ -11,6 +11,68 @@ import parser_config
     rj, rk: bits que indicam se os valores dos registradores de origem estão
 '''
 
+OPCODES = {
+    'fld': 0,
+    'fsd': 1,
+    'fadd': 2,
+    'fsub': 3,
+    'fmul': 4,
+    'fdiv': 5
+}
+
+# Define register prefix constants
+REG_PREFIXES = {
+    'x': 'int',
+    'f': 'float'
+}
+
+def parse_config(arquivo):
+    fus_configs = {}
+    with open("tests/uf_config2.in", 'r') as f:
+        linhas = f.readlines()
+        for linha in linhas:
+            partes = linha.strip().split()
+            fus_configs[partes[0]] = {'qtd': partes[1], 'cycles': partes[2]}
+    return fus_configs
+
+
+def init_instruction_status(program_name):
+    instruction_status =[]
+    with open(program_name, "r") as file:
+        for i, line in enumerate(file):
+            op = OPCODES[line.split()[0]]
+            if (op == 0 or op==1):
+                rd = line.split()[1].replace(",", "")
+                rs1 = line.split()[2].split("(")[1].replace(")", "")
+                rs2 = None
+                imm = line.split()[2].split("(")[0]
+                fu_type = 0
+            else:
+                if op == 2 or op == 3: fu_type = 2
+                elif op == 4: fu_type = 1
+                elif op == 5: fu_type = 3
+                rd = line.split()[1].replace(",", "")
+                rs1 = line.split()[2].replace(",", "")
+                rs2 = line.split()[3].replace(",", "")
+                imm = None          
+            instruction_status.append({ 
+                "id": i,
+                "inst": line.replace("\n", ""),
+                "opcode": op,
+                "fu_name": None,
+                "fu_type": fu_type,
+                "rd": rd,
+                "rs1": rs1,
+                "rs2": rs2,
+                "imm": imm,
+                "issue": None,
+                "read_operands": None,
+                "execution_complete": None,
+                "write_result": None
+
+            })
+    return  instruction_status
+
 def init_register_status():
     register_status = {}
 
