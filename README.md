@@ -36,3 +36,27 @@ Instruction/Cicle  Issue  Read  Execute  Write
 ```
 
 ### WAR (Write after read) Hazard -- Write Results
+```
+fadd f5, f2, f3
+fmul f2, f6, f7
+```
+
+Saída esperada:
+```
+Instruction/Cicle  Issue  Read  Execute  Write
+  fadd f5, f2, f3      1     2        4      5
+  fmul f2, f6, f7      2     3        7      8
+```
+
+### WAW (Write after write) Hazard -- Issue
+```
+fmul f8, f1, f2
+fadd f8, f3, f4
+```
+
+Saída esperada:
+```
+Instruction/Cicle  Issue  Read  Execute  Write
+  fmul f8, f1, f2      1     2        6      7
+  fadd f8, f3, f4      8     9       11     12
+```
