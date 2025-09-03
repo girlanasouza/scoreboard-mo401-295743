@@ -1,4 +1,3 @@
-fadd f1, f2, f3
-fsub f6, f3, f4
-fmul f4, f8, f9
+fld f1, 0(x1)
+fld f5, 0(x1)
 fdiv f2, f4, f5
