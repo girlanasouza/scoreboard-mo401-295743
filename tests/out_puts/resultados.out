@@ -1,0 +1,141 @@
+
+=== Execução 1: ./tests/in_puts_insts/t1.S + ./tests/in_puts_configs/fu_config1.in ===
+  Instruction/Cicle  Issue  Read  Execute  Write
+fld  f1, 0(x2)           1     2        3      4
+   fadd f3, f1, f4       2     5        7      8
+
+
+=== Execução 2: ./tests/in_puts_insts/t2.S + ./tests/in_puts_configs/fu_config2.in ===
+Instruction/Cicle  Issue  Read  Execute  Write
+  fadd f5, f2, f3      1     2        4      5
+  fmul f2, f6, f7      2     3        7      8
+
+
+=== Execução 3: ./tests/in_puts_insts/t3.S + ./tests/in_puts_configs/fu_config3.in ===
+Instruction/Cicle  Issue  Read  Execute  Write
+  fmul f8, f1, f2      1     2        6      7
+  fadd f8, f3, f4      8     9       11     12
+
+
+=== Execução 4: ./tests/in_puts_insts/t4.S + ./tests/in_puts_configs/fu_config4.in ===
+Instruction/Cicle  Issue  Read  Execute  Write
+    fld f1, 0(x1)      1     2        3      4
+    fld f5, 0(x1)      2     3        4      5
+  fdiv f2, f4, f5      3     6       16     17
+
+
+=== Execução 5: ./tests/in_puts_insts/t5.S + ./tests/in_puts_configs/fu_config5.in ===
+Instruction/Cicle  Issue  Read  Execute  Write
+ fld  f1, 100(x7)      1     2        3      4
+  fmul f2, f2, f4      2     3        7      8
+  fadd f2, f1, f3      9    10       12     13
+   fld  f9, 0(x3)     10    11       12     13
+  fdiv f3, f1, f7     11    12       22     23
+  fsub f6, f3, f4     14    24       26     27
+  fmul f7, f1, f2     15    16       20     21
+  fadd f4, f5, f2     28    29       31     32
+ fsd  f1, 50(x11)     29    30       31     32
+
+
+=== Execução 6: ./tests/in_puts_insts/t6.S + ./tests/in_puts_configs/fu_config6.in ===
+Instruction/Cicle  Issue  Read  Execute  Write
+ fld  f1, 100(x7)      1     2        3      4
+  fmul f2, f2, f4      2     3        7      8
+  fadd f2, f1, f3      9    10       12     13
+   fld  f9, 0(x3)     10    11       12     13
+  fdiv f3, f1, f7     11    12       22     23
+  fsub f6, f3, f4     14    24       26     27
+  fmul f7, f1, f2     15    16       20     21
+  fadd f4, f5, f2     28    29       31     32
+ fsd  f1, 50(x11)     29    30       31     32
+
+
+=== Execução 7: ./tests/in_puts_insts/t7.S + ./tests/in_puts_configs/fu_config7.in ===
+   Instruction/Cicle  Issue  Read  Execute  Write
+fld f2, 2445004(x31)      1     2        3      4
+     fmul f4, f2, f4      2     5       10     11
+     fdiv f6, f4, f2      3    12       22     23
+     fmul f2, f4, f8      5    12       17     18
+    fdiv f2, f5, x11     19    20       30     31
+   fadd f28, f25, f2     20    32       34     35
+  fmul f25, f18, f16     21    22       27     33
+  fsd f2, 44444(x11)     22    32       33     34
+    fsub f3, f2, f21     23    32       34     35
+   fadd f2, f28, f29     36    37       39     40
+
+
+=== Execução 8: ./tests/in_puts_insts/t8.S + ./tests/in_puts_configs/fu_config8.in ===
+Instruction/Cicle  Issue  Read  Execute  Write
+  fadd f4, f5, f7      1     2        4      5
+fsub f15, f4, f31      2     6        8      9
+  fadd f4, f5, f7      6     7        9     10
+
+
+=== Execução 9: ./tests/in_puts_insts/t9.S + ./tests/in_puts_configs/fu_config9.in ===
+Instruction/Cicle  Issue  Read  Execute  Write
+  fld f2, 200(x5)      1     2        3      4
+  fadd f4, f2, f3      2     5        7      8
+  fmul f2, f4, f6      5     9       13     14
+  fsub f6, f2, f7      6    15       17     18
+  fdiv f4, f8, f2      9    15       23     24
+ fsd f2, 400(x10)     10    15       16     17
+
+
+=== Execução 10: ./tests/in_puts_insts/t10.S + ./tests/in_puts_configs/fu_config10.in ===
+ Instruction/Cicle  Issue  Read  Execute  Write
+  fld  f2, 100(x1)      1     2        3      4
+   fadd f4, f2, f3      2     5        7      8
+   fmul f6, f4, f2      3     9       13     14
+   fdiv f8, f6, f4      4    15       25     26
+  fsub f10, f8, f2      5    27       29     30
+ fadd f12, f10, f6      9    31       33     34
+ fmul f14, f12, f8     15    35       39     40
+fdiv f16, f14, f10     27    41       51     52
+fadd f18, f16, f12     31    53       55     56
+ fsd  f18, 200(x2)     32    57       58     59
+
+
+=== Execução 11: ./tests/in_puts_insts/t11.S + ./tests/in_puts_configs/fu_config11.in ===
+Instruction/Cicle  Issue  Read  Execute  Write
+ fld  f5, 300(x3)      1     2        3      4
+  fadd f5, f5, f2      5     6        8      9
+  fmul f5, f5, f3     10    11       16     17
+  fdiv f5, f5, f4     18    19       31     32
+  fsub f5, f5, f6     33    34       36     37
+  fadd f5, f5, f7     38    39       41     42
+  fmul f5, f5, f8     43    44       49     50
+  fdiv f5, f5, f9     51    52       64     65
+ fsub f5, f5, f10     66    67       69     70
+ fsd  f5, 400(x4)     67    71       72     73
+
+
+=== Execução 12: ./tests/in_puts_insts/t12.S + ./tests/in_puts_configs/fu_config12.in ===
+ Instruction/Cicle  Issue  Read  Execute  Write
+  fsub f8, f9, f10      1     2        4      5
+fdiv f15, f12, f13      2     3       15     16
+  fadd f12, f1, f2      3     4        6      7
+fmul f14, f15, f16      4    17       22     23
+  fdiv f15, f1, f2     17    18       30     31
+fadd f17, f18, f15     18    32       34     35
+fsub f18, f20, f21     19    20       22     33
+fdiv f22, f23, f15     32    33       45     46
+ fmul f9, f23, f22     33    47       52     53
+ fadd f23, f1, f18     34    35       37     48
+fsd  f22, 500(x6)      35    47       48     49
+
+
+=== Execução 13: ./tests/in_puts_insts/t13.S + ./tests/in_puts_configs/fu_config13.in ===
+Instruction/Cicle  Issue  Read  Execute  Write
+ fld  f2, 600(x5)      1     2        3      4
+  fadd f4, f2, f3      2     5        7      8
+  fmul f2, f4, f6      5     9       14     15
+  fsub f6, f2, f7      6    16       18     19
+  fdiv f4, f8, f2      9    16       26     27
+  fadd f8, f4, f6     10    28       30     31
+ fsub f10, f8, f2     20    32       34     35
+fmul f2, f10, f12     21    36       41     42
+ fadd f14, f2, f4     32    43       45     46
+fdiv f4, f14, f16     33    47       57     58
+ fsd  f2, 800(x7)     34    43       44     45
+ fsd  f4, 804(x7)     35    59       60     61
+
